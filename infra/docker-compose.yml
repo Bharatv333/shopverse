@@ -1,0 +1,20 @@
+services:    #every container this file runs; we only have one so far
+  mysql:      #our name of the service (later: redis, kafka...)
+    image: mysql:8.4      #official MySql 8.4 image from docker hub, downloaded on first run
+    container_name: shopverse-mysql     #fixed name, so `docker exec shopverse-mysql ...` works
+    environment:      #settings the MySQL image reads when it first starts
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}     #root password: use the env var if set, else "root"
+      MYSQL_USER: shop      #creates an app user names "shop"
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-shop}     #its password, default "shop"
+    ports:
+      - "3307:3306"     #your laptop's port 3307 -> MySql's port 3306 inside the container
+    volumes:
+      - mysql-data:/var/lib/mysql     #keep the data files in a docker volume
+      - ./mysql/init:/docker-entrypoint-initdb.d   # runs once, on first start  (share your init folder with the container)
+    healthcheck:      #how docker knows MySql is actually ready, not just started
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]      #command run inside the container
+      interval: 10s     #run the check every 10 seconds
+      retries: 5      #5 failures in a row means "unhealthy"
+
+volumes:
+  mysql-data:     #declares the named volume used above
