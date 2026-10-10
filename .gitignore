@@ -1,0 +1,4 @@
+git rm -r --cached backend/.idea
+git add .gitignore
+git commit -m "Fill .gitignore, stop tracking IDE files"
+git push
