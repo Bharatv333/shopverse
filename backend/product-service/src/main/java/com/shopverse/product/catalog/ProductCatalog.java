@@ -64,4 +64,12 @@ public class ProductCatalog {
                 .map(p -> p.price().multiply(BigDecimal.valueOf(p.stock())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    //challenges
+    public List<Product> lowStock(int threshold){
+        return products.stream()
+                .filter(p -> p.stock()<threshold )
+                .toList();
+    }
+
 }

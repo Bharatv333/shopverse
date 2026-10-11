@@ -1,6 +1,7 @@
 package com.shopverse.product.catalog;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public record Product(
         Long id,
@@ -24,4 +25,10 @@ public record Product(
         return stock > 0;
     }
 
+    //challenges
+    public Product discount(BigDecimal percent){
+        BigDecimal hundred = new BigDecimal(100);
+        BigDecimal discountMultiplier = hundred.subtract(percent).divide(hundred, 2, RoundingMode.HALF_UP).multiply(this.price);
+        return new Product(this.id, this.name, this.category, discountMultiplier ,this.rating, this.stock);
+    }
 }

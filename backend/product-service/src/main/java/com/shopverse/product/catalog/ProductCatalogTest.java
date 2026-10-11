@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -81,5 +82,25 @@ public class ProductCatalogTest {
     void product_withBlankName_isRejected() {
         assertThrows(IllegalArgumentException.class, () ->
                 new Product(7L, " ", Category.HOME, BigDecimal.TEN, 4.0, 1));
+    }
+
+    @Test
+    void product_withDiscount(){
+        Product product = new Product(7L, "Laptop Pro 14", Category.ELECTRONICS, new BigDecimal("150"), 4.6, 10).discount(new BigDecimal(50));
+        assertEquals(new BigDecimal(75).setScale(2, RoundingMode.FLOOR), product.price());
+    }
+
+    @Test
+    void products_withLowStock_threshold() {
+        assertEquals(4, catalog.lowStock(100).size());
+    }
+
+    @Test
+    void rulesGive_differentPrices(){
+        Product mug = new Product(8L,"Coffee Mug",Category.HOME,new BigDecimal("299"),4.0,200);
+        PricingRule rule = new FestivalSale();
+        assertEquals(new BigDecimal("269.10"), rule.apply(mug));
+        rule = new ClearanceSale();
+        assertEquals(new BigDecimal("209.30"), rule.apply(mug));
     }
 }
