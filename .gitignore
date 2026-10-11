@@ -1,4 +1,15 @@
-git rm -r --cached backend/.idea
-git add .gitignore
-git commit -m "Fill .gitignore, stop tracking IDE files"
-git push
+# Java / Maven
+target/
+*.class
+*.log
+.idea/
+*.iml
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+
+# Env & OS
+.env
+.DS_Store
