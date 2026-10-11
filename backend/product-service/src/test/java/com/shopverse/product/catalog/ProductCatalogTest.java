@@ -87,7 +87,7 @@ public class ProductCatalogTest {
     @Test
     void product_withDiscount(){
         Product product = new Product(7L, "Laptop Pro 14", Category.ELECTRONICS, new BigDecimal("150"), 4.6, 10).discount(new BigDecimal(50));
-        assertEquals(new BigDecimal(75).setScale(2, RoundingMode.FLOOR), product.price());
+        assertEquals(new BigDecimal("75.00"), product.price());
     }
 
     @Test

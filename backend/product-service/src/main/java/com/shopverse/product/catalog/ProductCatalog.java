@@ -69,6 +69,7 @@ public class ProductCatalog {
     public List<Product> lowStock(int threshold){
         return products.stream()
                 .filter(p -> p.stock()<threshold )
+                .sorted(Comparator.comparingInt(Product::stock))
                 .toList();
     }
 

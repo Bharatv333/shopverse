@@ -28,7 +28,7 @@ public record Product(
     //challenges
     public Product discount(BigDecimal percent){
         BigDecimal hundred = new BigDecimal(100);
-        BigDecimal discountMultiplier = hundred.subtract(percent).divide(hundred, 2, RoundingMode.HALF_UP).multiply(this.price);
+        BigDecimal discountMultiplier = price.multiply(hundred.subtract(percent)).divide(hundred, 2, RoundingMode.HALF_UP);
         return new Product(this.id, this.name, this.category, discountMultiplier ,this.rating, this.stock);
     }
 }
