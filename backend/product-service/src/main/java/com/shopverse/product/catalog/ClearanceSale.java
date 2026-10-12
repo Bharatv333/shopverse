@@ -1,8 +1,11 @@
 package com.shopverse.product.catalog;
 
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Component("clearance")
 public class ClearanceSale implements PricingRule{
     @Override
     public BigDecimal apply(Product p) {

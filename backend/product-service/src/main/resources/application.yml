@@ -13,3 +13,7 @@ management:
   endpoint:
     health:
       show-details: always
+
+shop:
+  currency: INR
+  active-pricing-rule: none
