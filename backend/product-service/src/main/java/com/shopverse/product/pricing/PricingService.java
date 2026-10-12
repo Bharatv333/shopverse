@@ -1,5 +1,6 @@
 package com.shopverse.product.pricing;
 
+import com.shopverse.product.catalog.ClearanceSale;
 import com.shopverse.product.catalog.PricingRule;
 import com.shopverse.product.catalog.Product;
 import com.shopverse.product.config.ShopProperties;
