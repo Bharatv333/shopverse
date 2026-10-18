@@ -2,13 +2,36 @@ package com.shopverse.product.catalog;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class ProductCatalog {
     private final List<Product> products;
+    private final AtomicLong nextId;
 
     public ProductCatalog(List<Product> products){
-        this.products = new ArrayList<>(products);
+        this.products = new CopyOnWriteArrayList<>(products);
+        long maxId = products.stream().mapToLong(Product::id).max().orElse(0);
+        this.nextId = new AtomicLong(maxId + 1);
+    }
+
+    public Product add(Product product){
+        Product saved = new Product(nextId.getAndIncrement(), product.name(), product.category(), product.price(),
+                product.rating(), product.stock());
+        products.add(saved);
+        return saved;
+    }
+
+    public synchronized Product replace(Long id, Product product){
+        Product existing = getById(id);
+        Product updated = new Product(id, product.name(), product.category(), product.price(), product.rating(), product.stock());
+        products.set(products.indexOf(existing), updated);
+        return updated;
+    }
+
+    public boolean delete(Long id){
+        return products.removeIf(p -> p.id().equals(id));
     }
 
     public List<Product> findAll(){
