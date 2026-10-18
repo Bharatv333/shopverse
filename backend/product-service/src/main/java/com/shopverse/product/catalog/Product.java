@@ -16,6 +16,9 @@ public record Product(
         if(name == null || name.isBlank()){
             throw new IllegalArgumentException("Product name is required");
         }
+        if(price == null){
+            throw new IllegalArgumentException("Price is required");
+        }
         if(price.signum() < 0){
             throw new IllegalArgumentException("Price cannot be negative");
         }

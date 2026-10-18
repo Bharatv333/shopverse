@@ -119,4 +119,21 @@ public class ProductControllerTest {
                         .header("Access-Control-Request-Method", "DELETE"))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    void blankPriceGives400() throws Exception{
+        String body = """
+                {"name":"ABC","category":"HOME","stock":1}
+                """;
+        mvc.perform(post("/api/products").contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void findByPriceRange() throws Exception {
+        mvc.perform(get("/api/products").param("minPrice","500").param("maxPrice","1000"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(3))
+                .andExpect(jsonPath("$[2].name").value("Spring in Action"));
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
@@ -24,8 +25,13 @@ public class ProductController {
 
     @GetMapping
     public List<Product> list(@RequestParam(required = false)Category category,
-                              @RequestParam(required = false) String q
+                              @RequestParam(required = false) String q,
+                              @RequestParam(required = false) BigDecimal minPrice,
+                              @RequestParam(required = false) BigDecimal maxPrice
                               ){
+        if(minPrice!=null && maxPrice!=null){
+            return catalog.findByPriceRange(minPrice, maxPrice);
+        }
         if(category!=null){
             return catalog.findByCategory(category);
         }
@@ -39,6 +45,7 @@ public class ProductController {
     public Product getOne(@PathVariable Long id){
         return catalog.getById(id);
     }
+
 
     @PostMapping
     public ResponseEntity<Product> create(@RequestBody ProductRequest request) {
