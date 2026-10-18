@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterOutlet } from '@angular/router';
 
 interface Product{
   id: number;
-  name: String;
-  category: String;
+  name: string;
+  category: string;
   price: number;
   rating: number;
   stock: number; 
