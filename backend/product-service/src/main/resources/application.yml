@@ -4,6 +4,12 @@ server:
 spring:
   application:
     name: product-service
+  datasource:
+    url: jdbc:mysql://localhost:3307/product_db
+    username: shop
+    password: ${DB_PASSWORD:shop}
+  flyway:
+    clean-disabled: true
 
 management:
   endpoints:
