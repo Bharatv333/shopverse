@@ -17,7 +17,7 @@ public class FlywayMigrationTest {
     @Test
     void allMigrationsRanSuccessfully(){
         List<String> versions = jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE success = 1 ORDER BY installed_rank", String.class);
-        assertEquals(List.of("1", "2"), versions);
+        assertEquals(List.of("1", "2", "3"), versions);
     }
 
     @Test
