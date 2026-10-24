@@ -10,6 +10,18 @@ spring:
     password: ${DB_PASSWORD:shop}
   flyway:
     clean-disabled: true
+  jpa:
+    open-in-view: false        # no lazy loading after the service method ends
+    hibernate:
+      ddl-auto: validate       # Flyway creates tables; Hibernate only checks they match
+    show-sql: true             # print every SQL statement (learning only)
+    properties:
+      hibernate:
+        format_sql: true
+    data:
+      web:
+        pageable:
+          max-page-size: 100     # nobody can ask for 1,000,000 rows
 
 management:
   endpoints:
