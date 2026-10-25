@@ -99,7 +99,7 @@ public class ProductService {
     }
 
     public List<ProductSummary> findByCategorySlug(String slug){
-        categories.findBySlug(slug).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category NOT FOUND"));
+        categories.findBySlug(slug).orElseThrow(() -> new CategoryNotFoundException(slug));
         return products.findByCategorySlugOrderByPriceAsc(slug)
                 .stream().map(ProductSummary::from).toList();
     }
