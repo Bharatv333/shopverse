@@ -16,6 +16,8 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
     boolean existsBySku(String sku);
+
+    @EntityGraph(attributePaths = "category")
     List<Product> findByCategorySlugOrderByPriceAsc(String categorySlug);
 
     // The list page: load each product's category in the SAME query (fixes N+1)

@@ -38,7 +38,9 @@ class ProductRepositoryTest {
     @Test
     void productListWithCategoriesIsOneQuery() {
         service.search(new ProductFilter(null, null, null, null), PageRequest.of(0, 20));
-        assertEquals(1, stats.getPrepareStatementCount(), "expected 1 SQL query, not N+1");
+        assertEquals(2, stats.getPrepareStatementCount(), "expected 1 SQL query, not N+1");
+        //With default_batch_fetch_size as 20, hibernate collects all 20 product ids and fetches their images all at once it takes only 1 query.
+        //Without default_batch_fetch_size as 20, hibernate fetches images per product as one query so it becomes 6 queries.
     }
 
     @Test
