@@ -19,10 +19,10 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 20
-    data:
-      web:
-        pageable:
-          max-page-size: 100     # nobody can ask for 1,000,000 rows
+  data:
+    web:
+      pageable:
+        max-page-size: 100     # nobody can ask for 1,000,000 rows
 
 management:
   endpoints:

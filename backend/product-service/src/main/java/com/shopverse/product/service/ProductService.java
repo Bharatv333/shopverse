@@ -13,9 +13,12 @@ import com.shopverse.product.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 
 import static com.shopverse.product.repository.ProductSpecs.*;
 
@@ -93,5 +96,11 @@ public class ProductService {
             throw new IllegalArgumentException("categoryId is required");
         }
         return categories.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+    }
+
+    public List<ProductSummary> findByCategorySlug(String slug){
+        categories.findBySlug(slug).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category NOT FOUND"));
+        return products.findByCategorySlugOrderByPriceAsc(slug)
+                .stream().map(ProductSummary::from).toList();
     }
 }

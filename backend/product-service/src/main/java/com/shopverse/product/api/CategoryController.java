@@ -1,12 +1,10 @@
 package com.shopverse.product.api;
 
 import com.shopverse.product.repository.CategoryRepository;
-import com.shopverse.product.repository.ProductRepository;
-import org.springframework.http.HttpStatus;
+import com.shopverse.product.service.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -14,12 +12,12 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryRepository categories;
-    private final ProductRepository products;
+    private final ProductService service;
 
 
-    public CategoryController(CategoryRepository categories, ProductRepository products) {
+    public CategoryController(CategoryRepository categories, ProductService service) {
         this.categories = categories;
-        this.products = products;
+        this.service = service;
     }
 
     // GET /api/categories -> [{"id":2,"name":"Books","slug":"books","productCount":2}, ...]
@@ -30,14 +28,8 @@ public class CategoryController {
 
     @GetMapping("/api/categories/{slug}/products")
     public List<ProductSummary> findByCategorySlug(@PathVariable String slug){
-        categories.findBySlug(slug).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category NOT FOUND"));
-        return products.findByCategorySlugOrderByPriceAsc(slug)
-                .stream().map(ProductSummary::from).toList();
+        return service.findByCategorySlug(slug);
     }
 
-//    @GetMapping("/api/categories")
-//    public List<Category> list(){
-//        return List.of(Category.values());
-//    }
 
 }
