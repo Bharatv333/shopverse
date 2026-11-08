@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "products")
-@SQLDelete(sql = "UPDATE products SET deleted_at = NOW(6) WHERE id = ?")   // delete() becomes a soft delete
+@SQLDelete(sql = "UPDATE products SET deleted_at = NOW(6) WHERE id = ? AND version = ?")   // delete() becomes a soft delete
 @SQLRestriction("deleted_at IS NULL")
 public class Product {
 
@@ -56,6 +56,8 @@ public class Product {
     @Column(nullable = false, length = 20)
     private ProductStatus status = ProductStatus.ACTIVE;
 
+    @Version
+    private long version;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sortOrder")
