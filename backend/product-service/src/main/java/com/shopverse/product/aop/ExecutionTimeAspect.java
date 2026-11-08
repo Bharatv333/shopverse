@@ -1,6 +1,5 @@
 package com.shopverse.product.aop;
 
-import org.apache.juli.logging.Log;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -21,7 +20,7 @@ public class ExecutionTimeAspect {
         try{
             return joinPoint.proceed();
         }finally {
-            long ms = (System.nanoTime() - start) / 1_00_000;
+            long ms = (System.nanoTime() - start) / 1_000_000;
             log.info("{} took {} ms",joinPoint.getSignature().toShortString(),ms);
         }
     }

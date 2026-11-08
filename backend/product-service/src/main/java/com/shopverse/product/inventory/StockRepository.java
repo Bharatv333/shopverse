@@ -24,7 +24,7 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
                 s.version = s.version + 1
             where s.productId = :productId and s.available >= :quantity
             """)
-    int reserveAutomically(Long productId, int quantity);
+    int reserveAtomically(Long productId, int quantity);
 
     // ONLY for the "no locking" demo: writes numbers we calculated in Java, ignoring @Version
     @Modifying

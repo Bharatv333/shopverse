@@ -1,12 +1,15 @@
 package com.shopverse.product.inventory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class StockService {
 
-    private StockRepository stock;
+    private final StockRepository stock;
 
     public StockService(StockRepository stock){
         this.stock = stock;
@@ -45,7 +48,8 @@ public class StockService {
     public void reserveAtomic(Long productId, int quantity){
         if(quantity <= 0)
             throw new IllegalArgumentException("Quantity must be positive");
-        if(stock.reserveAutomically(productId, quantity) == 0)
+        if(stock.reserveAtomically(productId, quantity) == 0)
             throw new OutOfStockException(productId, quantity, get(productId).getAvailable());
     }
+
 }
