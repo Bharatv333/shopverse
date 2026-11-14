@@ -5,6 +5,8 @@ springdoc:
     path: /swagger-ui.html    # open http://localhost:8081/swagger-ui.html
 
 logging:
+  pattern:
+    correlation: "[%X{requestId:-}] "    # %X{requestId} = read from MDC, :- = print nothing if empty
   level:
     com.shopverse: DEBUG    # our own code: show debug logs too
 
@@ -29,10 +31,17 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 20
+  mvc:
+    apiversion:
+      use:
+        header: API-Version
+      default: 1
   data:
     web:
       pageable:
         max-page-size: 100     # nobody can ask for 1,000,000 rows
+
+
 
 management:
   endpoints:

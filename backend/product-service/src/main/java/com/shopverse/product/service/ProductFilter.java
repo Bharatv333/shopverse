@@ -1,6 +1,15 @@
 package com.shopverse.product.service;
 
+import com.shopverse.product.api.validation.ValidPriceRange;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+
 import java.math.BigDecimal;
 
-public record ProductFilter(Long categoryId, BigDecimal minPrice, BigDecimal maxPrice, String q) {
+@ValidPriceRange
+public record ProductFilter(
+        Long categoryId,
+        @PositiveOrZero BigDecimal minPrice,
+        @PositiveOrZero BigDecimal maxPrice,
+        @Size(max = 100) String q) {
 }

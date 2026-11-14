@@ -3,6 +3,7 @@ package com.shopverse.product.error;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.*;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 // One place that turns exceptions into clean JSON errors (RFC 9457 "problem details") for EVERY controller.
 // Extending ResponseEntityExceptionHandler gives us ready-made handlers for Spring's own errors
@@ -63,10 +65,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // @Valid on a @RequestBody failed -> list every bad field
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request){
-        List<FieldProblem> errors = ex.getBindingResult().getFieldErrors().stream()
+        var fieldErrors = ex.getBindingResult().getFieldErrors().stream()
                 .map(fe -> new FieldProblem(fe.getField(), fe.getDefaultMessage()))
                 .sorted(Comparator.comparing(FieldProblem::field))
                 .toList();
+        var globalErrors = ex.getBindingResult().getGlobalErrors().stream()
+                .map(ge -> new FieldProblem(ge.getObjectName(), ge.getDefaultMessage()))
+                .toList();
+        var errors = Stream.concat(fieldErrors.stream(), globalErrors.stream()).toList();
         ProblemDetail body = validationProblem(errors);
         return handleExceptionInternal(ex, body, headers, status, request);
     }
@@ -93,6 +99,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private ProblemDetail problem(HttpStatus status, String title, String detail){
         ProblemDetail body = ProblemDetail.forStatusAndDetail(status, detail);
         body.setTitle(title);
+        body.setProperty("requestId", MDC.get("requestId"));
         return body;
     }
 }

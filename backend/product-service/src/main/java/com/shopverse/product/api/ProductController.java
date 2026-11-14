@@ -32,19 +32,23 @@ public class ProductController {
     // @ParameterObject: show Pageable in Swagger as 3 simple query params (page, size, sort), not one "pageable" object
     @Operation(operationId = "listProducts", summary = "Search products, one page at a time")
     @GetMapping
-    public PagedModel<ProductSummary> list(@RequestParam(required = false) Long categoryId,
-                                           @RequestParam(required = false) @PositiveOrZero BigDecimal minPrice,
-                                           @RequestParam(required = false) @PositiveOrZero BigDecimal maxPrice,
-                                           @RequestParam(required = false) @Size(max = 100) String q,
+    public PagedModel<ProductSummary> list(@Valid @ParameterObject ProductFilter filter,
                                            @ParameterObject @PageableDefault(size = 20, sort = "id") Pageable pageable) {
-        ProductFilter filter = new ProductFilter(categoryId, minPrice, maxPrice, q);
         return new PagedModel<>(service.search(filter, pageable));
     }
 
     @Operation(operationId = "getProduct", summary = "Get one product with its images")
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", version = "1")
     public ProductDetails getOne(@PathVariable Long id) {
         return service.get(id);
+    }
+
+    @Operation(operationId = "getProductV2", summary = "Get one product (v2: price is an object)")
+    @GetMapping(path = "/{id}", version = "2")
+    public ProductDetailsV2 getOneV2(@PathVariable Long id) {
+        ProductDetails d = service.get(id);
+        return new ProductDetailsV2(d.id(), d.sku(), d.name(), new ProductDetailsV2.Money(d.price(), d.currency()),
+                                    d.categoryName(), d.images());
     }
 
     // @Validated(OnCreate.class): run the normal rules AND the OnCreate-only rules (sku required)
