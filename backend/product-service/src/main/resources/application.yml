@@ -1,3 +1,13 @@
+springdoc:
+  paths-to-match: /api/**   # document only our real API, not /hello or /pricing
+  default-produces-media-type: application/json   # without this the spec says "*/*" and generated clients read responses as a Blob
+  swagger-ui:
+    path: /swagger-ui.html    # open http://localhost:8081/swagger-ui.html
+
+logging:
+  level:
+    com.shopverse: DEBUG    # our own code: show debug logs too
+
 server:
   port: 8081
 

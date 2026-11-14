@@ -84,12 +84,12 @@ class ProductControllerTest {
     }
 
     @Test
-    void duplicateSkuGives400() throws Exception {
+    void duplicateSkuGives409() throws Exception {
         String body = """
                 {"sku":"BK-CLC-003","name":"Clean Code copy","categoryId":2,"price":10}
                 """;
         mvc.perform(post("/api/products").contentType(MediaType.APPLICATION_JSON).content(body))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.detail").value("SKU BK-CLC-003 already exists"));
     }
 

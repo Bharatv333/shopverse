@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "generate:api": "openapi-generator-cli generate -i http://localhost:8081/v3/api-docs -g typescript-angular -o src/app/api --additional-properties=ngVersion=20.0.0,providedIn=root"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +24,7 @@
     "@angular/build": "^20.0.1",
     "@angular/cli": "^20.0.1",
     "@angular/compiler-cli": "^20.0.0",
+    "@openapitools/openapi-generator-cli": "^2.42.2",
     "typescript": "~5.8.2"
   }
 }

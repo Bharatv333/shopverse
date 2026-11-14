@@ -1,93 +1,93 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CategoriesService, CategorySummary, ProductRequest, ProductControllerService, ProductSummary } from './api';
 
-interface Product{
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  rating: number;
-  stock: number; 
-}
-
-const API = "http://localhost:8081/api";
+// The shape of the "errors" list our GlobalExceptionHandler sends with a 400
+interface FieldProblem { field: string; message: string; }
 
 @Component({
   selector: 'app-root',
   imports: [FormsModule],
   template: `
-     <h1>ShopVerse playground</h1>
+    <h1>ShopVerse playground</h1>
 
     <label>Category
-      <select [(ngModel)]="filter" (change)="load()">
-        <option value="">All</option>
-        @for (c of categories(); track c) { <option [value]="c">{{ c }}</option> }
+      <select [(ngModel)]="categoryId" (change)="load()">
+        <option [ngValue]="undefined">All</option>
+        @for (c of categories(); track c.id) { <option [ngValue]="c.id">{{ c.name }} ({{ c.productCount }})</option> }
       </select>
     </label>
 
     <table border="1" cellpadding="6">
-      <tr><th>Id</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th></th></tr>
+      <tr><th>Id</th><th>SKU</th><th>Name</th><th>Category</th><th>Price</th><th></th></tr>
       @for (p of products(); track p.id) {
         <tr>
-          <td>{{ p.id }}</td><td>{{ p.name }}</td><td>{{ p.category }}</td>
-          <td>{{ p.price }}</td><td>{{ p.stock }}</td>
-          <td>
-            <button (click)="addTen(p)">+10 stock</button>
-            <button (click)="remove(p)">Delete</button>
-          </td>
+          <td>{{ p.id }}</td><td>{{ p.sku }}</td><td>{{ p.name }}</td>
+          <td>{{ p.categoryName }}</td><td>{{ p.price }} {{ p.currency }}</td>
+          <td><button (click)="remove(p)">Delete</button></td>
         </tr>
       }
     </table>
 
     <h2>Add product</h2>
+    <input placeholder="SKU, e.g. HM-LMP-007" [(ngModel)]="form.sku" />
     <input placeholder="Name" [(ngModel)]="form.name" />
-    <select [(ngModel)]="form.category">
-      @for (c of categories(); track c) { <option [value]="c">{{ c }}</option> }
+    <select [(ngModel)]="form.categoryId">
+      @for (c of categories(); track c.id) { <option [ngValue]="c.id">{{ c.name }}</option> }
     </select>
     <input type="number" placeholder="Price" [(ngModel)]="form.price" />
-    <input type="number" placeholder="Stock" [(ngModel)]="form.stock" />
     <button (click)="add()">Add</button>
 
     @if (error()) { <p style="color: red">{{ error() }}</p> }
+    <ul style="color: red">
+      @for (e of fieldErrors(); track e.field) { <li><b>{{ e.field }}</b>: {{ e.message }}</li> }
+    </ul>
   `,
-  styles: [],
 })
-export class App implements OnInit{
-  private http = inject(HttpClient);
+export class App implements OnInit {
+  // Generated from the backend's OpenAPI spec: no hand-written URLs or interfaces
+  private productsApi = inject(ProductControllerService);
+  private categoriesApi = inject(CategoriesService);
 
-  products = signal<Product[]>([]);
-  categories = signal<string[]>([]);
+  products = signal<ProductSummary[]>([]);
+  categories = signal<CategorySummary[]>([]);
   error = signal('');
-  filter = '';
-  form = { name: '', category: 'HOME', price: 0, stock: 0 };
+  fieldErrors = signal<FieldProblem[]>([]);
+  categoryId?: number;
+  form: ProductRequest = { sku: '', name: '', categoryId: 1, price: 0 };   // typed: a typo here is a compile error
 
   ngOnInit() {
-    this.http.get<string[]>(`${API}/categories`).subscribe(c => this.categories.set(c));
+    this.categoriesApi.listCategories().subscribe(c => this.categories.set(c));
     this.load();
   }
 
   load() {
-    const params: Record<string, string> = this.filter ? { category: this.filter } : {};
-    this.http.get<Product[]>(`${API}/products`, { params }).subscribe({
-      next: list => this.products.set(list),
-      error: e => this.error.set(e.message),
+    this.productsApi.listProducts(this.categoryId).subscribe({
+      next: page => this.products.set(page.content),
+      error: e => this.showError(e),
     });
   }
 
-  add() {   // POST
-    this.http.post<Product>(`${API}/products`, this.form).subscribe({
-      next: () => { this.error.set(''); this.load(); },
-      error: e => this.error.set(e.error?.detail ?? e.message),
+  add() {
+    this.productsApi.createProduct(this.form).subscribe({
+      next: () => { this.clearErrors(); this.load(); },
+      error: e => this.showError(e),
     });
   }
 
-  addTen(p: Product) {   // PATCH: send only the field that changes
-    this.http.patch<Product>(`${API}/products/${p.id}`, { stock: p.stock + 10 })
-      .subscribe(() => this.load());
+  remove(p: ProductSummary) {
+    this.productsApi.deleteProduct(p.id!).subscribe(() => this.load());
   }
 
-  remove(p: Product) {   // DELETE
-    this.http.delete(`${API}/products/${p.id}`).subscribe(() => this.load());
+  // Every error from the backend is a ProblemDetail: { title, status, detail, errors? }
+  private showError(e: HttpErrorResponse) {
+    this.error.set(e.error?.detail ?? e.message);
+    this.fieldErrors.set(e.error?.errors ?? []);
+  }
+
+  private clearErrors() {
+    this.error.set('');
+    this.fieldErrors.set([]);
   }
 }

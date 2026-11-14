@@ -1,6 +1,8 @@
 package com.shopverse.product.service;
 
-public class CategoryNotFoundException extends RuntimeException{
+import com.shopverse.product.error.NotFoundException;
+
+public class CategoryNotFoundException extends NotFoundException {
     public CategoryNotFoundException(Long id){
         super("Category "+id+" not found");
     }
