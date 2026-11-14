@@ -57,6 +57,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // Never send e.getMessage() here: it can leak table names, SQL or file paths.
     @ExceptionHandler(Exception.class)
     public ProblemDetail unexpected(Exception e){
+        log.error("Unexpected error", e);
         return problem(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error", "Something went wrong on our side, Please try again later.");
     }
 

@@ -4,6 +4,7 @@ import com.shopverse.product.api.validation.OnCreate;
 import com.shopverse.product.service.ProductFilter;
 import com.shopverse.product.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.math.BigDecimal;
 import java.net.URI;
 
+@Tag(name = "Products")
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {

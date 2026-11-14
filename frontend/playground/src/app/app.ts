@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CategoriesService, CategorySummary, ProductRequest, ProductControllerService, ProductSummary } from './api';
+import { CategoriesService, CategorySummary, ProductRequest, ProductsService, ProductSummary } from './api';
 
 // The shape of the "errors" list our GlobalExceptionHandler sends with a 400
 interface FieldProblem { field: string; message: string; }
@@ -47,7 +47,7 @@ interface FieldProblem { field: string; message: string; }
 })
 export class App implements OnInit {
   // Generated from the backend's OpenAPI spec: no hand-written URLs or interfaces
-  private productsApi = inject(ProductControllerService);
+  private productsApi = inject(ProductsService);
   private categoriesApi = inject(CategoriesService);
 
   products = signal<ProductSummary[]>([]);

@@ -60,7 +60,7 @@ public class ProductService {
         product.setDescription(request.description());
         Product saved = products.save(product);
         log.info("Created product {} with id {}", saved.getSku(), saved.getId());   // {} = placeholder, no string +
-        return mapper.toDetails(products.save(product));
+        return mapper.toDetails(saved);
     }
 
     @Transactional
