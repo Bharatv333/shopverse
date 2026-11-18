@@ -2,6 +2,7 @@ package com.shopverse.product.service;
 
 import com.shopverse.product.api.ProductDetails;
 import com.shopverse.product.api.ProductMapper;
+import com.shopverse.product.api.ProductPatchRequest;
 import com.shopverse.product.api.ProductRequest;
 import com.shopverse.product.catalog.ProductNotFoundException;
 import com.shopverse.product.domain.Category;
