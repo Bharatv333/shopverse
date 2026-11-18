@@ -1,10 +1,12 @@
 package com.shopverse.product.inventory;
 
+import com.shopverse.product.TestcontainersConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.function.Consumer;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Import(TestcontainersConfiguration.class)
 public class StockConcurrencyTest {
     static final long PRODUCT = 1L;
     static final int IN_STOCK = 5;

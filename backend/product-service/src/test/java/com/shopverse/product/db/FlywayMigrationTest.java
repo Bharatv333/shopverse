@@ -1,8 +1,10 @@
 package com.shopverse.product.db;
 
+import com.shopverse.product.TestcontainersConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
@@ -11,6 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@Import(TestcontainersConfiguration.class)
 public class FlywayMigrationTest {
     @Autowired JdbcTemplate jdbc;
 

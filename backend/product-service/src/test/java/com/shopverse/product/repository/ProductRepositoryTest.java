@@ -1,5 +1,6 @@
 package com.shopverse.product.repository;
 
+import com.shopverse.product.TestcontainersConfiguration;
 import com.shopverse.product.domain.Product;
 import com.shopverse.product.service.ProductFilter;
 import com.shopverse.product.service.ProductService;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "spring.jpa.properties.hibernate.generate_statistics=true")
+@Import(TestcontainersConfiguration.class)
 class ProductRepositoryTest {
 
     @Autowired ProductRepository products;
