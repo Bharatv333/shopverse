@@ -1,0 +1,324 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --brand: #4f46e5;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --bg: #f9fafb;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+a {
+  color: var(--brand);
+  text-decoration: none;
+}
+h1,
+h2,
+h3 {
+  margin: 0.6em 0 0.4em;
+}
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  background: var(--line);
+}
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+button.link {
+  border: none;
+  background: none;
+  color: var(--brand);
+  padding: 0;
+}
+.btn {
+  display: inline-block;
+  background: var(--brand);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+}
+.muted {
+  color: var(--muted);
+}
+.error {
+  color: #b91c1c;
+}
+.ok {
+  color: #047857;
+}
+
+/* header */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 24px;
+  background: white;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.logo {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+.search {
+  flex: 1;
+  max-width: 420px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font: inherit;
+}
+.topbar nav {
+  display: flex;
+  gap: 16px;
+  margin-left: auto;
+}
+.topbar nav a.active {
+  font-weight: 600;
+  text-decoration: underline;
+}
+.badge {
+  background: var(--brand);
+  color: white;
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 0.8rem;
+  margin-left: 4px;
+}
+
+/* home */
+.hero {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 16px;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 14px;
+}
+
+/* product cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  transition: opacity 0.2s;
+}
+.grid.loading {
+  opacity: 0.5;
+}
+.card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.card h3 {
+  font-size: 1rem;
+  color: var(--text);
+}
+.card p {
+  margin: 0;
+}
+.card button {
+  margin-top: auto;
+}
+.price {
+  font-weight: 600;
+}
+.price.big {
+  font-size: 1.6rem;
+}
+
+/* list page */
+.list-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+}
+.filters h3 {
+  font-size: 0.95rem;
+}
+.facets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+.facets a.active {
+  font-weight: 700;
+}
+.price-form {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.price-form input {
+  width: 70px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.list-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+/* detail page */
+.detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 12px;
+}
+.thumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.thumbs button {
+  padding: 2px;
+}
+.thumbs button.active {
+  border-color: var(--brand);
+}
+.buy {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.stepper output {
+  min-width: 2ch;
+  text-align: center;
+}
+
+/* cart */
+table.cart {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+table.cart th,
+table.cart td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.cart-product {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cart-total {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+@media (max-width: 700px) {
+  .list-layout,
+  .detail {
+    grid-template-columns: 1fr;
+  }
+  .topbar {
+    flex-wrap: wrap;
+    padding: 12px 16px;
+  }
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  max-width: 420px;
+}
+
+.search-box .search {
+  width: 100%;
+  max-width: none;
+}
+
+.suggestions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* top: 100%; */
+  margin: 4px 0 0;
+  padding: 4px 0;
+  list-style: none;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
+}
+
+.suggestions a {
+  display: block;
+  padding: 6px 12px;
+  color: var(--text);
+}
+
+.suggestions a:hover {
+  background: var(--bg);
+}
