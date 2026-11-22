@@ -54,5 +54,5 @@ export class Home {
     stream: () => this.productsApi.listProducts(undefined, undefined, undefined, undefined, 0, 4, ['avgRating,desc']),
   });
 
-  private readonly recent = inject(RecentlyViewedStore);
+  protected readonly recent = inject(RecentlyViewedStore);
 }

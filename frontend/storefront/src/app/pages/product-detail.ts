@@ -83,10 +83,11 @@ export class ProductDetail {
   constructor() {
     const recent = inject(RecentlyViewedStore);
     effect(() => {
-      const p = this.product.value();
       // untracked: track() READS recent.products(). Without untracked, this effect would also
       // depend on products, then write products, then run again... forever (the page freezes).
-      if (p) untracked(() => recent.track({ ...p, mainImage: p.images?.[0] }));
+      if (!this.product.hasValue()) return;
+      const p = this.product.value();
+      untracked(() => recent.track({ ...p, mainImage: p.images?.[0] }));
     });
   }
 

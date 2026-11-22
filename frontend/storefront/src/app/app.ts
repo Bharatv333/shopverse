@@ -59,6 +59,7 @@ export class App {
 
   search(q: string) 
   {
+    this.term.set('');
     this.router.navigate(['/products'], { queryParams: {q: q.trim() || null}});
   }
 }

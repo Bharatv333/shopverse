@@ -14,5 +14,5 @@ export class QtyStepper{
     // model(): a signal the PARENT can bind two-way with [(qty)]="someSignal"
     readonly qty = model(1);
     readonly min = input(1);
-    readonly max = input(1);
+    readonly max = input(10);
 }

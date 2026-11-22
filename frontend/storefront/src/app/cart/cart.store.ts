@@ -1,5 +1,5 @@
-import { computed, effect } from "@angular/core";
-import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from "@ngrx/signals";
+import { computed } from "@angular/core";
+import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
 import { withLocalStorage } from "../shared/with-local-storage";
 
 export interface CartItem{
@@ -31,7 +31,7 @@ export const CartStore = signalStore(
     withComputed(({ items }) => ({                                   // derived values, recalculated only when items change
         count: computed(() => items().reduce((n, i) => n + i.qty, 0)),
         total: computed(() => items().reduce((sum, i) => sum + (i.price * i.qty), 0)),
-        isEmpty: computed(() => items().length == 0)
+        isEmpty: computed(() => items().length === 0)
     })),
     withMethods(store => ({                                         // the ONLY way to change state
         add(product: CartProduct, qty = 1): void
@@ -47,7 +47,7 @@ export const CartStore = signalStore(
                 productId: id,
                 name: product.name ?? '',
                 price: product.price ?? 0,
-                currency: product.currency ?? '',
+                currency: product.currency ?? 'INR',
                 image: product.mainImage ?? product.images?.[0],
                 qty: Math.min(qty, MAX_QTY),
             };

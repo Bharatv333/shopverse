@@ -14,7 +14,7 @@ import { imageFor } from "./images";
                 <img [src]="image(p)" [alt]="p.name" width="300" height="200" loading="lazy"/>
                 <h3>{{p.name}}</h3>
             </a>
-            <p class="muted">{{p.categoryName}} @if (p.brand) { {{p.brand}} }</p>
+            <p class="muted">{{p.categoryName}} @if (p.brand) { · {{p.brand}} }</p>
             <p class="price">{{p.price | currency: p.currency : 'symbol' : '1.0-2'}}</p>
             <button (click)="addToCart.emit(p)">Add to cart</button>
         </article>
